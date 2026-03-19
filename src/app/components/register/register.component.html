@@ -28,7 +28,7 @@
 
     <!-- Event Binding: (click) ejecuta el método login() del .ts al hacer clic -->
     <!-- Property Binding: [disabled] enlaza la propiedad disabled con una condición del .ts -->
-    <button (click)="register()" [disabled]="email === '' || password === ''">Ingresar</button>
+    <button (click)="register()" [disabled]="email === '' || password === ''">Registrarse</button>
 
     <!-- @if: muestra el párrafo solo si "mensaje" no está vacío (control de flujo Angular 17+) -->
     @if (mensaje !== '') {

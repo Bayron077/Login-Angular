@@ -19,7 +19,16 @@ export class RegisterComponent {
   constructor(private router: Router) {}
 
   register(){
+        // Validación básica
+    if (this.email === '' || this.password === ''|| this.nombre === '' || this.apellido === '' ) {
+      this.mensaje = 'Por favor completá todos los campos.';
+      return;
+    }
 
+    // Credenciales de prueba (hardcodeadas para aprender)
+    if (this.email === 'admin@mail.com' && this.password === '1234') {
+      this.mensaje = 'Registro exitoso! Bienvenido.';
+    }
   }
 
   goToHome(){
