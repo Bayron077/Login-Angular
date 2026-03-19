@@ -1,40 +1,47 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // <-- necesario para usar [(ngModel)]
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
-    imports: [FormsModule],  
+  imports: [FormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+// Propiedades enlazadas con el HTML mediante Two-way Binding [(ngModel)]
   nombre: string = '';
-  apellido: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = '';
   mensaje: string = '';
+  exito: boolean = false; // controla el color del mensaje y si mostrar el botón de login
 
-  constructor(private router: Router) {}
+  // Inyección de dependencias: Router para navegar, AuthService para registrar usuarios
+  constructor(private router: Router, private authService: AuthService) {}
 
-  register(){
-        // Validación básica
-    if (this.email === '' || this.password === ''|| this.nombre === '' || this.apellido === '' ) {
-      this.mensaje = 'Por favor completá todos los campos.';
+  register() {
+    // Validación: las contraseñas deben coincidir antes de intentar registrar
+    if (this.password !== this.confirmPassword) {
+      this.mensaje = 'Las contraseñas no coinciden.';
+      this.exito = false;
       return;
     }
 
-    // Credenciales de prueba (hardcodeadas para aprender)
-    if (this.email === 'admin@mail.com' && this.password === '1234') {
-      this.mensaje = 'Registro exitoso! Bienvenido.';
+    // Se delega el registro al AuthService - retorna true si se registró, false si el email ya existe
+    const ok = this.authService.register(this.nombre, this.email, this.password);
+    if (ok) {
+      this.mensaje = `¡Registro exitoso! Bienvenido, ${this.nombre}.`;
+      this.exito = true;
+    } else {
+      this.mensaje = 'Ese email ya está registrado.';
+      this.exito = false;
     }
   }
 
-  goToHome(){
-    this.router.navigate(['/']);
+  // Navega a /login usando el Router (programmatic navigation)
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
 }
-}
-    
-
-
